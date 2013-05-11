@@ -1,0 +1,7 @@
+{% if authors_sidebar_list %}
+    {% for author in authors_sidebar_list %}
+        <li><a href="{% url books:author_books author.id %}">{{ author.first_name }} {{ author.last_name }}</a></li>
+    {% endfor %}
+{% else %}
+    <p>No authors are available.</p>
+{% endif %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load new_books %}
+{% load popular_books %}
+
+{% block howitworks %}
+  active
+{% endblock %}
+
+
+{% block content %}
+  <h2 class="page-title">How it works</h2>
+
+  <p>BookReflect gives you a simple way to discuss books. Using BookReflect is easy. Take these easy steps to get started and join the discussion.</p>
+
+  <h3>To get started...</h3>
+
+  <ol>
+  	<li>To <b>create an account</b>, click <a href="{% url registration_register %}"><u>here</u></a> and fill in your information in the fields.</li>
+  	<li>You will get an <b>activation link</b> at the email address you provided. Open the email and click on the link to activate your account.</li>
+  	<li><b>Login</b> with your new username and password by clicking <a href="{% url auth_login %}?next={{ request.get_full_path }}"><u>here</u></a> or the Login button on top.</li>
+  </ol>
+
+  <h3>Once you have logged in</h3>
+
+  <ol>
+  	<li>Use the <b>search</b> bar on the <a href="{% url books:index %}"><u>home page</u></a> to look for a book. You can put the title, the author, or even clues like a character's name or a name of a place where the story takes place.</li>
+  	<li>Select a book from the search results to see the short description and the <b>related discussion topics</b>.</li>
+  	<li><b>Select</b> one of the existing discussion topics or <b>create a new one</b>.</li>
+  	<li><b>Leave your comment</b> to let others see what you think.</li>
+  </ol>
+
+  <h3>Other ways to find books</h3>
+
+  <ol>
+  	<li>You can also find books <a href="{% url books:authors %}"><u>by author</u></a> or <a href="{% url books:genres %}"><u>by genre</u></a> by clicking the corresponding menu items.</li>
+  	<li><b>Popular authors</b> and <b>popular genres</b> are also displayed on the right for quicker access.</li>
+  </ol>
+  <br />
+  <div class="hero-unit text-center">
+    <p style="font-size:24px;margin-bottom:20px;line-height:30px;">Ready to search now? <br /><strong>Search</strong> for books by typing in the <strong>title</strong>, <strong>author</strong> or <strong>any other clue</strong></p>
+    <form class="form-search" action="{% url haystack_search %}">
+      <input type="text" class="input-xlarge search-query" name="q">
+      <button type="submit" class="btn btn-success">Search</button>
+    </form>
+  </div>
+
+{% endblock%}

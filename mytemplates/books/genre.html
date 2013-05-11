@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block genres %}
+	active
+{% endblock %}
+
+{% block content %}
+	<h2 class="page-title">Genres</h2>
+	{% if genre_list %}
+	    <ul class="browse-list">
+	    {% for genre in genre_list %}
+	        <li><a href="{% url books:genre_books genre.id %}" alt="{{ genre.name }}"><b>{{ genre.name }}</b></a> (<i><small>{{ genre.book_count }} {% if genre.book_count == 1 %}book{% else %}books{% endif %}</small></i>)</li>
+	    {% endfor %}
+	    </ul>
+	{% else %}
+	    <p>No genres are available.</p>
+	{% endif %}
+{% endblock%}

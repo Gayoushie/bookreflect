@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h2 class="page-title">Account Activation</h2>
+<br />
+{% if account %}
+
+<p>Account successfully activated.</p>
+
+<p>You may now login to proceed your activities on our website.</p>
+<p><a href="{% url auth_login %}">Log in</a></p>
+
+{% else %}
+
+<p class="text-error">Account activation failed!</p>
+<p>Do you already have an account? <a href="{% url registration_register %}">Click here</a> to create one. 
+
+{% endif %}
+
+{% endblock %}

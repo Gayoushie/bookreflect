@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h2 class="page-title">Register</h2>
+<br />
+<p>
+	Please fill in the following fields to create a new account.<br /><br />
+	<b>Note:</b> In the email field, put your current email address.<br />
+	<b>Why do we need your email address?</b> <br />An activation link will be sent to your email address after registration. This is done to prevent fake accounts. 
+</p>
+<br />
+<form method="post" action=".">{% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="{% trans 'Submit' %}" class="btn btn-success" />
+</form>
+{% endblock %}

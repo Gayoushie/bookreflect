@@ -1,0 +1,7 @@
+{% if genres_sidebar_list %}
+    {% for genre in genres_sidebar_list %}
+        <li><a href="{% url books:genre_books genre.id %}">{{ genre.name }}</a></li>
+    {% endfor %}
+{% else %}
+    <p>No genres are available.</p>
+{% endif %}

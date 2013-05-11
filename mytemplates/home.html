@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load new_books %}
+{% load popular_books %}
+
+{% block home %}
+  active
+{% endblock %}
+
+
+{% block content %}
+  {% if not user.is_authenticated %}
+    <div class="hero-unit">
+      <img src="/static/img/banner.png" style="" title="Create account, Find a book, Join the discussion" />
+    </div>
+  {% endif %}
+  <div class="hero-unit text-center hero-unit-search">
+    <p><strong>Search</strong> for books by typing in the <strong>title</strong>, <strong>author</strong> or <strong>any other clue</strong></p>
+    <form class="form-search" action="{% url haystack_search %}">
+      <input type="text" class="input-xlarge search-query" name="q">
+      <button type="submit" class="btn btn-success">Search</button>
+    </form>
+  </div>
+  <div class="row-fluid title-strip">
+      <h3>Popular books</h3>
+  </div>
+  <div class="row-fluid">
+    {% popular_books %}
+  </div><!--/row-->
+  <div class="row-fluid title-strip">
+      <h3>Recent additions</h3>
+  </div>
+  <div class="row-fluid">
+    {% new_books %}
+  </div><!--/row-->
+{% endblock%}

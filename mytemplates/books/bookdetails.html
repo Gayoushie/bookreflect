@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load book_topics %}
+
+
+{% block content %}
+	<h2 class="page-title">{{ book.title }}</h2>
+	<h4 class="book-details-author">by <a href="{% url books:author_books book.author.id %}">{{ book.author.first_name }} {{ book.author.last_name }}</a></h4>
+	<div style="clear:both;"></div>
+	<p>
+		{% if book.cover %}
+      	<img src="{{ MEDIA_URL }}{{ book.cover }}" style="height:240px;margin:5px 15px 5px 0px;float:left;" title="{{ book.title }} cover" />
+      {% else %}
+      	<img src="/static/img/no-cover.jpg" style="height:240px;margin:5px 15px 5px 0px;float:left;" title="No cover for this book" />
+      {% endif %}
+		{{ book.description }}
+	</p>
+	<a href="{% url books:author_books book.author.id %}" class="pull-right">View other books by {{ book.author.first_name }} {{ book.author.last_name }}</a>
+	<div style="clear:both;border-bottom:1px #ccc solid; height:10px;"></div>
+	
+		<h3 id="new">Discussion Topics</h3>
+
+		{% if user.is_authenticated %}
+
+			<h4>Type in a new topic to start a new discussion or join an existing discussion</h4>
+
+			{% if error_message %}<p class="text-error"><strong>{{ error_message }}</strong></p>{% endif %}
+			<form action="{% url books:new_topic book.id %}#new" method="post">
+				{% csrf_token %}
+				<textarea name="new_topic" class="input-xxlarge" style="width:600px;" id="new_topic"></textarea>
+				<input type="submit" value="Submit Topic" class="btn btn-success confirm-topic" style="margin-left:10px" />
+			</form>
+
+		{% else %}
+			<div style="font-size:17px; margin-bottom:30px;">
+				Please <a href="{% url auth_login %}?next={{ request.get_full_path }}">login</a> to your account to create you own discussion topic.<br />
+				Don't have an account? <a href="{% url registration_register %}">Register now!</a>
+			</div>
+		{% endif %}
+
+		{% if topic_list %}
+		    <ul style="margin:0px 0px 20px 0px;">
+		    {% for topic in topic_list %}
+		        <li class="discussion-topic">
+		        	<a href="/discussions/{{ topic.id }}/" alt="Discussion about {{ topic.name }}">{{ topic.name }} - <i><small>{{ topic.post_count }} {% if topic.post_count == 1 %}comment{% else %}comments{% endif %}</small></i></a><br />
+		        	<span style="font-size:12px;">posted by {{ topic.author }} </span>
+		        	<span style="font-size:12px;" class="pull-right">{{ topic.start_date }}</span>
+		        </li>
+		    {% endfor %}
+		    </ul>
+		    
+		    <div class="pagination row-fluid text-center">
+			    <span class="step-links">
+			        {% if topic_list.has_previous %}
+			            <a href="?page={{ topic_list.previous_page_number }}#new" class="pull-left prev-page" alt="Previous page of discussion topics">&laquo; Previous page</a>
+			        {% endif %}
+
+			        <span class="current">
+			            Page {{ topic_list.number }} of {{ topic_list.paginator.num_pages }}
+			        </span>
+
+			        {% if topic_list.has_next %}
+			            <a href="?page={{ topic_list.next_page_number }}#new" class="pull-right next-page" alt="Next page of discussion topics">Next page &raquo;</a>
+			        {% endif %}
+			    </span>
+			</div>
+		{% else %}
+			<h4>There are no discussion topics for this book, yet.</h4>
+		{% endif %}
+
+{% endblock%}

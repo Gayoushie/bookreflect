@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<a href="{% url books:book_details topic.book.id %}#new" class="pull-right" style="margin-left:10px;margin-top:10px;">Back to all topics &raquo;</a>
+
+	<h4><a href="{% url books:book_details topic.book.id %}">{{ topic.book.title }}</a> </h4>
+
+	<h3 style="margin-bottom:0px; padding-bottom:0px;">{{ topic }}</h3>
+	<div style="font-size:14px; color:#888; margin-bottom:30px;">Started by <i>{{ topic.author }}</i> on <i>{{ topic.start_date }}</i></div>
+
+	{% if user.is_authenticated %}
+		<h4 style="margin-top:30px;">What do you think about this topic? Post a comment</h4>
+		{% if error_message %}<p class="text-error"><strong>{{ error_message }}</strong></p>{% endif %}
+
+		<form action="{% url discussions:new_post topic.id %}" method="post">
+			{% csrf_token %}
+			<textarea name="new_post_content" id="new_post_content" class="input-xxlarge" style="width:570px;"></textarea>
+			<input type="submit" value="Submit Comment" class="btn btn-success confirm-post" style="margin-left:10px" />
+		</form>
+
+	{% else %}
+		<div style="font-size:17px; margin-bottom:30px;">
+			Please <a href="{% url auth_login %}?next={{ request.get_full_path }}">login</a> to your account to post a comment.<br />
+			Don't have an account? <a href="{% url registration_register %}">Register now!</a>
+		</div>
+	{% endif %}
+
+	<h4>All comments</h4>
+	{% if post_list %}
+	    <ul class="unstyled">
+	    {% for post in post_list %}
+	        <li class="post-item"> 
+	        	<p style="margin-bottom:5px;"><span style="color:#569604;font-size:17px;"><b>{{ post.author }}</b> says:</span><br />"{{ post.post_content }}"</p>
+	        	<div style="color:#569604;"><small><i>{{ post.post_date }}</i></small></div>
+	        	<div style="clear:both;"></div>
+	        </li>
+	    {% endfor %}
+	    </ul>
+
+	    <div class="pagination row-fluid text-center">
+		    <span class="step-links">
+		        {% if post_list.has_previous %}
+		            <a href="?page={{ post_list.previous_page_number }}#new" class="pull-left prev-page">&laquo; Previous page</a>
+		        {% endif %}
+
+		        <span class="current">
+		            Page {{ post_list.number }} of {{ post_list.paginator.num_pages }}
+		        </span>
+
+		        {% if post_list.has_next %}
+		            <a href="?page={{ post_list.next_page_number }}#new" class="pull-right next-page">Next page &raquo;</a>
+		        {% endif %}
+		    </span>
+		</div>
+	{% else %}
+	    <p>No comments are available.</p>
+	{% endif %}
+
+{% endblock%}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block authors %}
+	active
+{% endblock %}
+
+{% block content %}
+	{% if author_list %}
+		<h2 class="page-title">Authors</h2>
+
+		{% regroup author_list by first_letter as letter_list %}
+
+		<ul style="margin:20px 0px 0px 15%; padding: 0px; width: 70%;">
+		{% for letter in letter_list %}
+			<a href="#{{ letter.grouper }}" alt="Authors with {{ letter.grouper }}"><li class="first-letter-link">{{ letter.grouper }}</li></a>
+		{% endfor %}
+		</ul>
+
+		<div style="clear:both; height:20px;"></div>
+
+		<ul style="margin:0px; padding:0px;"> 
+		{% for letter in letter_list %}
+		  <li class="first-letter" id="{{ letter.grouper }}"><h3 class="capital-letter">{{ letter.grouper }}</h3>
+		    <ul>
+		        {% for author in letter.list %}
+		        <li><a href="{% url books:author_books author.id %}">{{ author.last_name }}, {{ author.first_name }}</a></li>
+		        {% endfor %}
+		    </ul>
+		  </li>
+		{% endfor %}
+		</ul>
+	{% else %}
+	    <p>No authors are available.</p>
+	{% endif %}
+	
+{% endblock %}
+
+

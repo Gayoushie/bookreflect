@@ -1,0 +1,24 @@
+<h4>Type in a new topic to start a new discussion or join an existing discussion</h4>
+
+{% if error_message %}<p class="text-error"><strong>{{ error_message }}</strong></p>{% endif %}
+<form action="{% url books:new_topic book.id %}#new" method="post">
+	{% csrf_token %}
+	<textarea name="new_topic" class="input-xxlarge" style="width:600px;" id="new_topic"></textarea>
+	<input type="submit" value="Submit Topic" class="btn btn-success confirm-topic" style="margin-left:10px;" />
+</form>
+
+{% if topics %}
+    <ul style="margin:0px 0px 20px 0px;">
+    {% for topic in topics %}
+        <li class="discussion-topic">
+        	<a href="/discussions/{{ topic.id }}/">{{ topic.name }} - <i><small>{{ topic.post_count }} {% if topic.post_count == 1 %}comment{% else %}comments{% endif %}</small></i></a><br />
+        	<span style="font-size:12px;">posted by {{ topic.author }} </span>
+        	<span style="font-size:12px;" class="pull-right">{{ topic.start_date }}</span>
+        </li>
+    {% endfor %}
+    </ul>
+    
+{% else %}
+	<h4>There are no discussion topics for this book, yet.</h4>
+{% endif %}
+
